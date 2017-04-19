@@ -4,4 +4,4 @@ kids_purchases = JOIN kids BY kid, purchases BY name;
 filtered = FILTER kids_purchases BY (age==10 OR age ==11 OR age == 12);
 summary = FOREACH (GROUP filtered BY product) GENERATE group, COUNT(filtered) AS amt;
 res = LIMIT (ORDER summary BY amt DESC) 1;
-DUMP res; 
+STORE res INTO 'output3' USING PigStorage(':');
