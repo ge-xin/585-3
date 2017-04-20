@@ -4,4 +4,5 @@ purchases = LOAD '/root/585_3/purchases.txt' USING PigStorage(' ') AS (name:char
 selected_kids_purchases = JOIN selected_kids BY kid, purchases BY name;
 summary = FOREACH (GROUP selected_kids_purchases BY product) GENERATE group, COUNT(selected_kids_purchases) AS amt;
 res = LIMIT (ORDER summary BY amt DESC) 1;
-STORE res INTO 'output3' USING PigStorage(':');
+top = FOREACH (JOIN res BY amt, summary BY amt) GENERATE summary::group, summary::amt;
+STORE top INTO 'output3' USING PigStorage(':');
